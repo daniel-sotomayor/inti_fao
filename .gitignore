@@ -1,0 +1,15 @@
+# Dependencias y artefactos
+node_modules/
+.vercel/
+.DS_Store
+Thumbs.db
+.dev-vercel/
+
+# Carpeta duplicada del geoportal: se usa GEOPORTAL_REGISTRO_SIN_INTERNET
+GEOPORTAL_REGISTRO/
+
+# Copia de seguridad del index
+index copy.html
+
+# Material de apoyo (no hace falta en el repositorio)
+capturas/

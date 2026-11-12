@@ -1,0 +1,73 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/GEOPORTAL_REGISTRO_SIN_INTERNET/datos/predios/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/geo+json; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/GEOPORTAL_REGISTRO_SIN_INTERNET/datos/regiones.geojson",
+      "headers": [
+        { "key": "Content-Type", "value": "application/geo+json; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/GEOPORTAL_REGISTRO_SIN_INTERNET/datos/estados.geojson",
+      "headers": [
+        { "key": "Content-Type", "value": "application/geo+json; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/GEOPORTAL_REGISTRO_SIN_INTERNET/datos/comunas.geojson",
+      "headers": [
+        { "key": "Content-Type", "value": "application/geo+json; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/GEOPORTAL_REGISTRO_SIN_INTERNET/datos/cubo.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/GEOPORTAL_REGISTRO_SIN_INTERNET/vendor/tiles/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/GEOPORTAL_REGISTRO_SIN_INTERNET/vendor/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/visor-registro.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    },
+    {
+      "source": "/visor-registro.css",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      ]
+    }
+  ]
+}

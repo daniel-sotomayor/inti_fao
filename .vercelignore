@@ -1,0 +1,29 @@
+# Archivos que NO se suben a Vercel (el despliegue queda sólo con lo necesario).
+# Vercel lo usa también para los despliegues desde Git.
+#
+# OJO: .vercelignore sustituye la lista por omisión, así que se incluyen
+# explícitamente .git, .vercel y node_modules.
+
+.git
+.vercel
+node_modules
+
+# Documentación y material de apoyo (no se usan en el sitio)
+capturas
+tools
+LEEME-VISOR-REGISTRO.txt
+DESPLIEGUE_VERCEL.md
+README.md
+*.md
+
+# Copia de seguridad del index y carpeta duplicada del geoportal
+# (GEOPORTAL_REGISTRO no tiene teselas: se usa GEOPORTAL_REGISTRO_SIN_INTERNET)
+index copy.html
+GEOPORTAL_REGISTRO
+
+# Lanzadores y material del paquete original que el sitio no necesita
+GEOPORTAL_REGISTRO_SIN_INTERNET/iniciar.bat
+GEOPORTAL_REGISTRO_SIN_INTERNET/iniciar.ps1
+GEOPORTAL_REGISTRO_SIN_INTERNET/_leaflet_test.js
+GEOPORTAL_REGISTRO_SIN_INTERNET/GUION_VIDEO.txt
+GEOPORTAL_REGISTRO_SIN_INTERNET/LEEME.txt
