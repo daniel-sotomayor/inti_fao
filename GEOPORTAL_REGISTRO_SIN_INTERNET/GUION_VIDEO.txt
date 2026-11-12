@@ -1,0 +1,86 @@
+GUION PARA GRABAR UN VIDEO DEL GEOPORTAL
+=========================================
+
+Duración objetivo: 3 a 4 minutos.
+Herramienta sugerida: OBS Studio (gratuito) o la grabadora de pantalla de
+Windows (Win + G). Resolución 1920x1080, 30 fps.
+
+Antes de grabar:
+  - Ejecute iniciar.bat y espere a que abra el navegador.
+  - Cierre pestañas y notificaciones.
+  - Deje el mapa en "Nivel país" con la cobertura por comuna encendida.
+  - Grabe sin audio y añada la narración después, o hable en vivo.
+
+--------------------------------------------------------------------
+ESCENA 1 · Presentación (0:00 – 0:20)
+Pantalla: vista general del geoportal.
+Acción: mover suavemente el mapa y hacer un zoom leve.
+Narración:
+  "Este es el geoportal del registro agrario. Permite ver cómo se
+   distribuyen los sujetos del registro en el territorio y qué
+   superficie cubren, desde el país hasta la comuna."
+
+ESCENA 2 · Nivel territorial (0:20 – 0:45)
+Acción: abrir el selector "Nivel territorial" y elegir un estado, por
+ejemplo Zulia. Esperar a que cargue y a que el mapa se acerque.
+Narración:
+  "El selector de nivel funciona como un zoom administrativo: al elegir
+   un estado, el mapa se acerca y se cargan sus registros."
+
+ESCENA 3 · Polígonos de registro (0:45 – 1:15)
+Acción: con Zulia cargado, acercar con la rueda hasta que aparezcan las
+parcelas; pasar el ratón y hacer clic en un predio para abrir su ficha.
+Narración:
+  "Cada polígono es un predio. Al tocarlo se abre su ficha con el tipo
+   de sujeto, el género, la edad, la superficie y el año del registro.
+   Como las parcelas son pequeñas, hay que acercar el mapa para verlas
+   con forma."
+
+ESCENA 4 · Capas de cobertura (1:15 – 1:50)
+Acción: apagar "Por comuna" y encender "País (cuadrícula)"; luego
+encender "Por región" y "Por estado", una por una.
+Narración:
+  "Además de los predios, el visor pinta la cobertura: qué porcentaje
+   del territorio tiene registro. Se puede ver por comuna, por estado,
+   por región o en una cuadrícula nacional. Cada capa se prende y se
+   apaga por separado."
+
+ESCENA 5 · Filtros (1:50 – 2:30)
+Acción: en el estado cargado, marcar solo "Mujeres", luego "Adultos
+mayores", luego elegir el año 2014. Mostrar cómo baja el contador.
+Narración:
+  "Los filtros permiten hacerse preguntas concretas: cuántas mujeres,
+   cuántos adultos mayores, cuántos registros de un año determinado.
+   El mapa y el tablero se actualizan en el acto."
+
+ESCENA 6 · Solo en comunas (2:30 – 2:50)
+Acción: activar "Solo los que están en comunas" y comparar el contador.
+Narración:
+  "Este filtro separa el registro que cae dentro de una comuna del que
+   queda fuera. Es la distinción clave del análisis."
+
+ESCENA 7 · Tablero (2:50 – 3:20)
+Acción: tocar una comuna en el mapa; el tablero cambia a esa comuna.
+Narración:
+  "El tablero responde a lo que se toca: si toco una comuna, muestra sus
+   totales; si toco una región, los de la región. Siempre con el desglose
+   por género, edad y tipo de sujeto."
+
+ESCENA 8 · Cierre (3:20 – 3:40)
+Acción: volver a "Nivel país" y dejar la cobertura por comuna.
+Narración:
+  "Eso es todo. El visor funciona sin instalación, desde una carpeta
+   local, y puede llevarse a cualquier equipo."
+
+--------------------------------------------------------------------
+Consejos de grabación
+  - Grabe cada escena por separado y únalas al final: es más fácil
+    repetir una sola escena si algo sale mal.
+  - No mueva el ratón de forma nerviosa; los desplazamientos lentos se
+    ven mejor.
+  - Si añade música, que sea instrumental y a volumen bajo.
+  - Exporte en MP4 con H.264.
+
+Recorrido automático
+  El botón "Ver recorrido guiado" del panel reproduce estos mismos pasos
+  dentro del geoportal, con la opción "Reproducir" para que avance solo.

@@ -1,0 +1,90 @@
+GEOPORTAL · REGISTRO AGRARIO (VERSIÓN SIN INTERNET)
+====================================================
+
+Cómo abrirlo
+------------
+1. Descomprima la carpeta completa (no lo abra desde dentro del ZIP).
+2. Doble clic en "iniciar.bat".
+3. Se abre el navegador en http://localhost:8000
+
+Si el puerto 8000 está ocupado, el lanzador prueba con el siguiente libre y
+muestra la dirección elegida en la ventana negra.
+
+No requiere internet: la librería Leaflet y las teselas del mapa base
+(zooms 6 a 9) están incluidas en la carpeta vendor.
+
+Herramientas del mapa
+---------------------
+Arriba a la derecha, debajo del selector de mapas base, en una fila:
+  +  Acercar
+  -  Alejar
+  ✋  Mover el mapa (mano); en este modo el clic no abre fichas
+  ▲  Seleccionar (puntero)
+
+El botón « del panel izquierdo lo pliega y deja solo un botón » para
+volver a abrirlo.
+
+Navegación: todo por clic
+-------------------------
+No hay selector de nivel. Se navega tocando el mapa:
+
+  - Tocar una COMUNA: el tablero muestra sus totales, el mapa se acerca y,
+    si no había registros cargados, carga el estado al que pertenece y los
+    filtra a esa comuna.
+  - Tocar un ESTADO: el tablero muestra sus totales y se cargan los
+    polígonos de registro de ese estado.
+  - Tocar una REGIÓN: el tablero muestra sus totales y se cargan los
+    registros de sus estados.
+
+El botón "País" del tablero vuelve al punto de partida en cualquier momento.
+
+Capas de superficie registrada
+------------------------------
+Tres capas con degradado semitransparente según las hectáreas registradas.
+Se prenden y apagan, y actúan una sola a la vez para que el clic no se
+confunda:
+  - Por región
+  - Por estado
+  - Por comuna (encendida al abrir)
+
+El botón "Quitar colores" deja las capas visibles solo con borde, sin
+relleno; "Poner colores" las vuelve a pintar.
+
+Polígonos de registro
+---------------------
+Dos casillas independientes:
+  - "Registro nacional (todo el país)": predios de 100 ha o más de todo el
+    país. Viene encendida al abrir el visor.
+  - "Registros del estado o región": predios del nivel que se toque en el
+    mapa.
+
+Al tocar un polígono se abre su ficha con el nombre del predio, el titular,
+el tipo de sujeto, el género, la edad, la superficie, el año y la comuna.
+
+Filtros
+-------
+  - Tipo de sujeto: naturales, redes y jurídicos.
+  - Género del titular: todos, hombres o mujeres.
+  - Grupo de edad: todos, jóvenes (18-29), adultos (30-59), adultos
+    mayores (60 y más).
+  - Año del registro: de 2014 a 2026.
+  - Solo los que están en comunas.
+
+Tablero
+-------
+Muestra registros, superficie, hombres y mujeres de la unidad activa, y
+responde a todos los filtros, incluido el año. Trae barras por género,
+grupo de edad y tipo de sujeto.
+
+Botones del tablero:
+  - "País": vuelve al nivel nacional y reinicia la selección.
+  - "Limpiar": devuelve todos los filtros a su estado inicial.
+
+Notas
+-----
+- La vista nacional carga solo los registros de 100 ha o más (34.003
+  predios, 66 % de la superficie). Cargar los 440.790 completos congelaría
+  el navegador.
+- Los polígonos están simplificados: sirven para ubicar, no para medir.
+- La capa de regiones no cubre Distrito Capital ni Nueva Esparta: se
+  asignaron a Central y Oriental.

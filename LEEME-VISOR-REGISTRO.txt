@@ -1,0 +1,276 @@
+GEOPORTAL DEL REGISTRO AGRARIO DENTRO DEL VISOR
+================================================
+Integración de la carpeta «GEOPORTAL_REGISTRO_SIN_INTERNET» en la pestaña
+«MAPA INTERACTIVO» de index.html. Todo es HTML + CSS + JavaScript: no hay
+Python, PHP, base de datos ni proceso en el servidor.
+
+
+1. QUÉ CAMBIÓ
+------------
+La pestaña del visor ahora tiene dos capas conmutables desde el encabezado:
+
+  · REGISTRO AGRARIO (por omisión): el geoportal local. Cobertura de la
+    superficie registrada por región, estado o comuna; polígonos de registro
+    nacionales y por estado/región; filtros por tipo de sujeto, género, grupo
+    de edad, año y «solo en comunas»; tablero con KPI y barras; tres fondos
+    de mapa (satélite, cartográfico local e INTi); recorrido guiado.
+  · ORT 2026: la coropleta institucional que ya existía (25 ORT + Esequibo),
+    con su consolidador por entidad federal. No se tocó su lógica.
+
+En el modo Registro el panel de filtros sustituye al antiguo panel flotante
+de predios (que dependía de una carpeta `predios/` que no existe) y el
+tablero ocupa la columna derecha, en lugar del consolidador ORT.
+
+Archivos nuevos:
+
+  visor-registro.js            Toda la lógica del geoportal integrado.
+  visor-registro.css           Estilos (claro/oscuro) del panel, tablero,
+                               fichas, tooltips y recorrido guiado.
+  tools/servidor-local.cjs     Servidor estático opcional para probar en local.
+  capturas/                    Capturas de pantalla de referencia (no hace
+                               falta subirlas al hosting).
+
+Archivos modificados:
+
+  index.html                   Cinco bloques: (1) Leaflet con respaldo local,
+                               (2) enlace a visor-registro.css, (3) conmutador
+                               de capa + insignia en el encabezado del visor,
+                               (4) panel y tablero del registro dentro del
+                               visor, (5) carga de visor-registro.js al final.
+
+La carpeta GEOPORTAL_REGISTRO_SIN_INTERNET no se modificó: se usa tal cual
+(datos, teselas y Leaflet local). Su propio index.html sigue funcionando
+solo si se abre esa carpeta con un servidor.
+
+
+2. CÓMO SE PUBLICA EN EL HOSTING (InfinityFree u otro)
+------------------------------------------------------
+Sube por FTP a la carpeta pública (normalmente `htdocs`) todo el contenido
+de esta carpeta, conservando la estructura:
+
+  htdocs/
+    index.html
+    visor-registro.js
+    visor-registro.css
+    INTI.jpg
+    1.jpeg
+    GEOPORTAL_REGISTRO_SIN_INTERNET/
+      datos/...
+      vendor/...
+
+No hay nada que configurar en el panel del hosting. Los `.geojson` se leen
+con fetch; el tipo MIME que devuelva el servidor no importa.
+
+Para el dominio inti.gt.tc la dirección final sería:
+  https://inti.gt.tc/index.html
+
+
+3. PROBAR EN LOCAL (opcional)
+-----------------------------
+Abrir index.html con doble clic NO funciona: el navegador bloquea las
+lecturas de los .geojson por file://. Hace falta cualquier servidor
+estático. Incluido:
+
+  node tools/servidor-local.cjs 8123
+  → http://127.0.0.1:8123/index.html
+
+(En el hosting no se usa este archivo; puede quedarse o no subirse.)
+
+
+3.1 SI EL VISOR DICE «SIN CUBO DE DATOS» O TODO SALE EN CERO
+------------------------------------------------------------
+El panel del Registro Agrario incluye un diagnóstico. Al abrir el visor,
+si algo falla sale un aviso rojo con la causa y los archivos que no se
+pudieron leer; el botón del estetoscopio (junto al ▶ del recorrido) repite
+la comprobación cuando quieras.
+
+Las dos causas habituales son:
+
+  a) Abriste index.html con doble clic (file://). El navegador no deja leer
+     los .geojson así. El aviso lo dice: «Abierto con doble clic (file://)».
+     Solución: el hosting, o en tu equipo
+        node tools/servidor-local.cjs 8123
+        → http://127.0.0.1:8123/index.html
+
+  b) En el hosting falta la carpeta de datos (o está en otro sitio). El aviso
+     muestra la ruta base que se está pidiendo y los archivos con error 404,
+     por ejemplo:
+        Base: https://inti.gt.tc/GEOPORTAL_REGISTRO_SIN_INTERNET/
+        datos/cubo.json · HTTP 404
+     Solución: subir GEOPORTAL_REGISTRO_SIN_INTERNET/ completa, al mismo
+     nivel que index.html (con datos/ y vendor/ dentro). Ojo con mayúsculas
+     y minúsculas: en el hosting Linux el nombre debe coincidir exactamente.
+
+El visor ya intenta adivinar la carpeta: prueba, en este orden,
+  GEOPORTAL_REGISTRO_SIN_INTERNET/ · GEOPORTAL_REGISTRO/ · geoportal/ ·
+  Geoportal/ · GEOPORTAL/ · registro/
+y usa la primera que tenga datos/cubo.json. Si la tuya se llama de otra
+forma no hay que tocar el código: abre el visor con el parámetro
+  https://inti.gt.tc/index.html?geoportal=NOMBRE_DE_TU_CARPETA/
+(o cambia `var GEO = ...` al principio de visor-registro.js). Ojo: la
+detección mira `datos/cubo.json`; si esa carpeta está incompleta el visor
+la elegirá igual y faltarán coberturas o teselas.
+
+Pista rápida: si el botón «Predios» muestra 440.790 pero las tarjetas del
+tablero están en 0, el cubo no se pudo leer (ese número es el valor de
+reserva).
+
+
+4. CÓMO SE USA
+--------------
+Encabezado del visor:
+  CAPA · Registro agrario | ORT 2026   cambia de una vista a la otra.
+  Predios (34.006)                     enciende/apaga el registro nacional.
+  Insignia ámbar                       registros y superficie del cubo.
+
+Panel izquierdo (modo Registro):
+  Superficie registrada   Región / Estado / Comuna (una a la vez) y
+                          «Quitar colores» para dejar sólo bordes.
+  Polígonos de registro   Nacional (100 ha o más), del estado o región, y
+                          «Solo los que están en comunas».
+  Tipo de sujeto          Naturales, Redes, Jurídicos.
+  Género del titular      Todos, Hombres, Mujeres.
+  Grupo de edad           Todos, 18-29, 30-59, 60+.
+  Año del registro        2014 a 2026.
+  Botones del encabezado  recorrido guiado y plegar el panel.
+
+Navegación:
+  · Clic en una comuna  → carga el estado de esa comuna, filtra sus registros,
+                          acerca el mapa y actualiza el tablero.
+  · Clic en un estado   → carga sus polígonos de registro.
+  · Clic en una región  → carga los estados de la región.
+  · Clic en un predio   → ficha con nombre, titular, tipo, género, edad,
+                          superficie, año y comuna.
+
+Tablero derecho (modo Registro):
+  Registros, superficie (ha), hombres y mujeres de la unidad activa; barras
+  por género, grupo de edad y tipo de sujeto; leyenda de la cobertura activa
+  y contador de polígonos visibles. «País» vuelve al nivel nacional y
+  «Limpiar» restablece los filtros.
+
+Fondo del mapa (primera sección del panel):
+  Tres opciones que se alternan sin quitar ninguna:
+    · Satélite      imágenes de Esri (World Imagery + etiquetas de
+                    referencia). Es el fondo por omisión; requiere internet.
+    · Cartográfico  teselas locales de OpenStreetMap incluidas en el
+                    geoportal (zooms 6 a 9, se escalan en vistas lejanas).
+    · INTi          el fondo institucional original del visor, sin imágenes
+                    externas (siempre disponible, incluso sin conexión).
+  La atribución del mapa cambia con el fondo. En modo ORT los fondos se
+  ocultan y vuelven al regresar a Registro. Para arrancar con otro fondo,
+  cambia `fondo: 'satelite'` en el estado S de visor-registro.js.
+
+
+5. DATOS Y PESOS
+----------------
+  datos/cubo.json                    0,9 MB  (agregados para el tablero)
+  datos/regiones.geojson             0,2 MB
+  datos/estados.geojson              0,4 MB
+  datos/comunas.geojson              1,4 MB
+  datos/predios/pais_100.geojson    13,5 MB  (34.006 predios ≥ 100 ha)
+  datos/predios/01..24.geojson     ~146 MB   (439.000 predios por estado)
+  vendor/tiles + leaflet             6,6 MB
+  ------------------------------------------------------------------
+  total aproximado                  ~169 MB
+
+Si el hosting queda corto de espacio puedes omitir `datos/predios/01..24`
+(ahorra ~146 MB): el visor mantiene la vista nacional y el tablero, pero al
+tocar un estado avisará que no hay polígonos. Al revés no funciona: el cubo
+y los tres GeoJSON de cobertura son imprescindibles.
+
+Los 34.006 predios nacionales se dibujan con el renderizador canvas de
+Leaflet; en un equipo modesto el primer dibujado puede tardar 1-2 segundos
+(se muestra el indicador «Cargando registro nacional…»).
+
+
+6. RUTAS Y MANTENIMIENTO
+------------------------
+La carpeta de datos se declara al principio de visor-registro.js:
+
+  var GEO = 'GEOPORTAL_REGISTRO_SIN_INTERNET/';
+
+Pero el visor la detecta solo: si ahí no hay `datos/cubo.json`, prueba
+GEOPORTAL_REGISTRO/, geoportal/, Geoportal/, GEOPORTAL/ y registro/. También
+puedes forzarla desde la dirección:
+
+  index.html?geoportal=mi_carpeta/
+
+Si prefieres fijarla en el código, cambia esa línea (con barra final).
+
+Los nombres de estados y comunas se leen de los datos; no hay listas que
+mantener, salvo los códigos de las 26 entidades en el arreglo ESTADOS.
+
+
+7. DEPENDENCIAS EXTERNAS
+------------------------
+Leaflet se carga del CDN y, si no responde, usa automáticamente la copia
+local en GEOPORTAL_REGISTRO_SIN_INTERNET/vendor/leaflet.js y .css.
+
+El fondo satélite usa los servicios públicos de Esri:
+  World_Imagery y Reference/World_Boundaries_and_Places (etiquetas).
+No necesitan clave ni cuenta, pero sí conexión a internet; la atribución
+(«Esri, Maxar, Earthstar Geographics») se muestra siempre en el mapa.
+El fondo cartográfico y el fondo INTi funcionan sin conexión.
+
+El resto del panel (Tailwind, Chart.js, FontAwesome, Google Fonts) sigue
+viniendo de CDN porque las demás pestañas lo usan. Si necesitas el sitio
+100 % sin internet, descarga esas librerías a una carpeta `vendor/` y cambia
+las etiquetas <script>/<link> del <head>.
+
+
+8. VERIFICACIÓN REALIZADA
+-------------------------
+Probado con Chrome headless (1440x1150) sobre un servidor estático:
+
+  · Sin errores de JavaScript y sin peticiones fallidas.
+  · Login, apertura de la pestaña y carga del cubo: 440.790 registros,
+    14,60 M ha.
+  · Vista nacional: 34.006 predios, 1.231 comunas en la cobertura.
+  · Clic en estado (Guárico): 28.379 polígonos, tablero 2.258.981 ha.
+  · Clic en comuna: carga su estado y deja los registros de la comuna.
+  · Ficha de predio: nombre, titular, tipo, género, edad, ha, año, comuna.
+  · Filtros de género, año, tipo y «solo comunas» recalculan tablero y mapa.
+  · «Limpiar», «País», plegado de panel y tablero.
+  · Conmutación Registro ↔ ORT y vuelta, sin perder capas.
+  · Recorrido guiado de 12 pasos y tema claro/oscuro.
+  · Fondos: satélite (teselas de Esri cargadas, atribución correcta),
+    cartográfico local y fondo INTi; cambio entre los tres sin errores y
+    sin peticiones fallidas, y conservación del fondo al pasar por ORT.
+  · Diagnóstico: carpeta correcta (8 recursos, «Datos accesibles»), carpeta
+    ausente (lista de 404 con la ruta base), apertura en file:// (aviso con
+    la explicación) y detección automática con la carpeta renombrada
+    (encuentra GEOPORTAL_REGISTRO/ y carga igual) y con ?geoportal=.
+
+Capturas en la carpeta `capturas/`.
+
+
+9. LIMITACIONES CONOCIDAS
+-------------------------
+  · El fondo satélite necesita internet (servicios de Esri) y no tiene
+    relieve sombreado ni nombres en español; las etiquetas son las de Esri.
+    Sin conexión, usa «Cartográfico» o «INTi».
+  · Teselas locales sólo de los zooms 6 a 9: al acercar más, el fondo se ve
+    suave (los polígonos y las coberturas siguen nítidos). En las vistas muy
+    lejanas (zoom 5 o menos) las teselas se amplían desde el zoom 6. Fuera
+    del área cubierta no se piden teselas, así que no aparecen cuadros grises.
+  · Los polígonos de predios están simplificados: sirven para ubicar, no
+    para medir.
+  · El Territorio Insular (código 25) no tiene polígonos en este conjunto.
+  · La capa de regiones no incluye Distrito Capital ni Nueva Esparta: se
+    asignaron a Central y Oriental, igual que en el geoportal original.
+  · El tablero responde a los filtros, pero la cobertura (colores del mapa)
+    muestra la superficie total registrada, no la filtrada; para eso está el
+    contador de «Polígonos visibles».
+
+
+10. SI HAY QUE VOLVER ATRÁS
+---------------------------
+El geoportal original queda intacto. Para dejar index.html como antes hay
+que revertir sus cinco bloques:
+  1. Quitar el respaldo local de Leaflet en el <head>.
+  2. Quitar <link rel="stylesheet" href="visor-registro.css">.
+  3. Quitar el conmutador de capa y la insignia del encabezado del visor.
+  4. Quitar el panel #regPanel del mapa y devolver el tablero #regDash a la
+     columna derecha (o eliminar el contenedor y dejar el consolidador).
+  5. Quitar <script src="visor-registro.js"></script> antes de </body>.
+Sin el <script>, el HTML añadido queda inerte y no estorba.
